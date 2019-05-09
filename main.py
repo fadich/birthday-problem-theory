@@ -4,6 +4,19 @@ import argparse
 from birthday import Model
 
 
+def people_number_validator(value):
+    if value is None:
+        return value
+    if not value.isdigit():
+        raise argparse.ArgumentTypeError('People number should be positive integer')
+
+    value = int(value)
+    if value < 2:
+        raise argparse.ArgumentTypeError('People number should not be less than 2')
+
+    return value
+
+
 def run_model(iterations: int, people_min: int, people_max: int):
     for people in range(people_min, people_max):
         results = []
@@ -18,15 +31,20 @@ def run_model(iterations: int, people_min: int, people_max: int):
 
 def main():
     parser = argparse.ArgumentParser(description='')
-    # parser.add_argument('people', type=int, help='People number')
+    parser.add_argument('-p', '-n', '--people', dest='people', type=people_number_validator, help='People number')
     parser.add_argument('-i', '--iter', '--iterations', dest='iterations', type=int, default=1000,
                         help='Number of iterations')
     parser.add_argument('-d', '--debug', dest='debug', action='store_true', help='set debug log level')
 
     args = parser.parse_args()
 
+
+
     try:
-        run_model(args.iterations, 2, 366)
+        run_model(
+            iterations=args.iterations,
+            people_min=args.people or 2,
+            people_max=args.people + 1 if args.people else 366)
     except KeyboardInterrupt:
         pass
 
