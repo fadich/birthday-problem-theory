@@ -18,7 +18,7 @@ def people_number_validator(value):
 
 
 def run_model(iterations: int, people_min: int, people_max: int):
-    for people in range(people_min, people_max):
+    for people in range(people_min, people_max + 1):
         results = []
         for i in range(iterations):
             model = Model(people)
@@ -38,13 +38,11 @@ def main():
 
     args = parser.parse_args()
 
-
-
     try:
         run_model(
             iterations=args.iterations,
             people_min=args.people or 2,
-            people_max=args.people + 1 if args.people else 366)
+            people_max=args.people or 365)
     except KeyboardInterrupt:
         pass
 
